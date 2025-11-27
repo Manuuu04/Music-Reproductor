@@ -25,23 +25,6 @@ let playList = [
 ];
 let counter = 0;
 
-playList.forEach(n => {
-
-    n['id'] = counter;
-    counter++
-
-        if (index === n.id) {
-
-        return;
-
-    } else {
-
-        const li = document.createElement('li');
-        li.textContent = n.name;
-        songsList.appendChild(li);
-
-    }
-});
 
 let archive = playList[index].archive
 
@@ -57,36 +40,36 @@ function updatePlayer() {
 }
 
 function reproducer() {
-
+    
     if (audio.paused) {
-    
+        
         audio.play();
-        btnPlay.textContent = '⏸️' 
-    
+        btnPlay.textContent = '❚❚' 
+        
     }else{
-
+        
         audio.pause();
         btnPlay.textContent = '▶'
-
+        
     }
-
+    
 };
 
 function nextSong() {
-
+    
     if (index < playList.length - 1) {
-
+        
         index++;
-
+        
         updatePlayer();
-
+        
         audio.play();
-        btnPlay.textContent = '⏸️';
+        btnPlay.textContent = '❚❚';
         
     } else {
         
         return;
-
+        
     }
 };
 
@@ -97,14 +80,14 @@ function previousSong() {
         index--;
         
         updatePlayer();
-
+        
         audio.play();
-        btnPlay.textContent = '⏸️';
-
+        btnPlay.textContent = '❚❚';
+        
     } else {
-       
+        
         return;
-    
+        
     }
 }
 
@@ -112,20 +95,44 @@ function updateSongList() {
     songsList.innerHTML = ''
     playList.forEach(n => {
         if (index === n.id) {
-        
+            
             return;
-        
+            
         } else {
-        
+            
             const li = document.createElement('li');
             li.textContent = n.name;
-        
+            
+            li.addEventListener('click', function() {
+                audio.src = n.archive;
+                index = n.id;
+                updatePlayer();
+                audio.play();
+                btnPlay.textContent = '❚❚'
+                
+            });
             songsList.appendChild(li);
-        
+            
         }
     });
     
 };
+
+playList.forEach(n => {
+
+    n['id'] = counter;
+    counter++
+
+        if (index === n.id) {
+
+        return;
+
+    } else {
+
+        updatePlayer();
+
+    }
+});
 
 audio.addEventListener("ended", nextSong);
 
