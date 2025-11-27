@@ -12,11 +12,29 @@ let playList = [
     {
         name: 'Aurora Instrumental',
         archive: '/music/Aurora.mp3'
+    },
+    {
+        name: 'Callaita',
+        archive: '/music/Callaita.mp3'
+
+    },
+    {
+        name: 'Columbia',
+        archive: '/music/Columbia.mp3'
     }
 ];
 
-audio.src = playList[index].archive;
-title.textContent = playList[index].name;
+let archive = playList[index].archive
+
+let nameSong = playList[index].name
+
+audio.src = archive
+title.textContent = `Cancion actual: ${nameSong}`;
+
+function updatePlayer() {
+    audio.src = playList[index].archive;
+    title.textContent = `Cancion actual: ${playList[index].name}`;
+}
 
 function reproducer() {
 
@@ -34,5 +52,44 @@ function reproducer() {
 
 };
 
+function nextSong() {
+
+    if (index < playList.length - 1) {
+
+        index++;
+
+        updatePlayer();
+    
+        audio.play();
+        btnPlay.textContent = '⏸️';
+    
+    } else {
+        
+        return;
+
+    }
+};
+
+function previousSong() {
+    
+    if (index > 0) {
+        
+        index--;
+        
+        updatePlayer();
+        
+        audio.play();
+        btnPlay.textContent = '⏸️';
+
+    } else {
+       
+        return;
+    
+    }
+}
 
 btnPlay.addEventListener('click', reproducer);
+
+btnNext.addEventListener('click', nextSong)
+
+btnPrevious.addEventListener('click', previousSong)
