@@ -23,6 +23,25 @@ let playList = [
         archive: '/music/Columbia.mp3'
     }
 ];
+let counter = 0;
+
+playList.forEach(n => {
+
+    n['id'] = counter;
+    counter++
+
+        if (index === n.id) {
+
+        return;
+
+    } else {
+
+        const li = document.createElement('li');
+        li.textContent = n.name;
+        songsList.appendChild(li);
+
+    }
+});
 
 let archive = playList[index].archive
 
@@ -34,6 +53,7 @@ title.textContent = `Cancion actual: ${nameSong}`;
 function updatePlayer() {
     audio.src = playList[index].archive;
     title.textContent = `Cancion actual: ${playList[index].name}`;
+    updateSongList();
 }
 
 function reproducer() {
@@ -59,10 +79,10 @@ function nextSong() {
         index++;
 
         updatePlayer();
-    
+
         audio.play();
         btnPlay.textContent = '⏸️';
-    
+        
     } else {
         
         return;
@@ -77,7 +97,7 @@ function previousSong() {
         index--;
         
         updatePlayer();
-        
+
         audio.play();
         btnPlay.textContent = '⏸️';
 
@@ -88,8 +108,29 @@ function previousSong() {
     }
 }
 
+function updateSongList() {
+    songsList.innerHTML = ''
+    playList.forEach(n => {
+        if (index === n.id) {
+        
+            return;
+        
+        } else {
+        
+            const li = document.createElement('li');
+            li.textContent = n.name;
+        
+            songsList.appendChild(li);
+        
+        }
+    });
+    
+};
+
+audio.addEventListener("ended", nextSong);
+
 btnPlay.addEventListener('click', reproducer);
 
-btnNext.addEventListener('click', nextSong)
+btnNext.addEventListener('click', nextSong);
 
-btnPrevious.addEventListener('click', previousSong)
+btnPrevious.addEventListener('click', previousSong);
