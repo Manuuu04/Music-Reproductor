@@ -7,8 +7,10 @@ const btnPlay = document.getElementById('play');
 const btnNext = document.getElementById('siguiente');
 const btnRepeat = document.getElementById('repetir');
 const songsList = document.getElementById('lista-canciones');
+const timeline = document.getElementById('timeline');
 const progress = document.getElementById('progreso');
 const volume = document.getElementById('volumen');
+const volumeValue = document.getElementById('valor-volumen');
 
 
 let index = 0;
@@ -116,7 +118,8 @@ function previousSong() {
 }
 
 function updateSongList() {
-    songsList.innerHTML = ''
+    songsList.innerHTML = '';
+    
     playList.forEach(n => {
         if (index === n.id) {
             
@@ -195,6 +198,42 @@ audio.addEventListener("ended", function(){
     };
 });
 
+audio.volume = volume.value / 100;
+
+volume.addEventListener('input', function() {
+    volumeValue.textContent = volume.value
+    audio.volume = volume.value / 100;
+});
+
+let songDuration = '';
+
+function formatDuration(a) {
+  const minutes = Math.floor(a / 60);
+  const seconds = Math.floor(a % 60);
+  const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+  return `${minutes}:${formattedSeconds}`; 
+}
+
+function updateProgress() {
+    progress.value = audio.currentTime
+    let songDuration = Math.floor(audio.duration)
+    progress.min = 0;
+    progress.max = songDuration
+    let currentAudio = Math.floor(audio.currentTime)
+    timeline.textContent = `${formatDuration(currentAudio)}/${formatDuration(songDuration)}`
+}
+
+audio.addEventListener('timeupdate', updateProgress)
+
+progress.addEventListener('input', function(){
+    let songDuration = Math.floor(audio.duration)
+    progress.min = 0;
+    progress.max = songDuration
+    let currentAudio = Math.floor(audio.currentTime)
+    timeline.textContent = `${formatDuration(currentAudio)}/${formatDuration(songDuration)}`
+    audio.currentTime = progress.value
+});
+
 btnPlay.addEventListener('click', reproducer);
 
 btnNext.addEventListener('click', nextSong);
@@ -202,3 +241,5 @@ btnNext.addEventListener('click', nextSong);
 btnPrevious.addEventListener('click', previousSong);
 
 btnRandom.addEventListener('click', random)
+
+audio.addEventListener("loadedmetadata", updateProgress);
